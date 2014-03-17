@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reddit Guesser</title>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="about">
+        <h4>Welcome to Reddit Guesser!</h4>
+        <p>Enter two subreddits in the inputs below, then try to figure out which titles come from which subreddits.</p>
+        <a href=""><i class="fa fa-github fa-2x"></i></a>
+      </div>
+      <div id="about"><i class="fa fa-info-circle fa-lg"></i></div>
+      <div class="jumbotron">
+        <h1>Reddit Guesser</h1>
+        <form role="form">
+          <div class="form-group has-success">
+            <label for="sr1" class="sr-only">Subreddit 1</label>
+            <input type="text" class="form-control" id="sr1" placeholder="Subreddit 1" autocorrect="off" autocapitalize="off" autofocus>
+          </div>
+          <div class="form-group has-warning">
+            <label for="sr2" class="sr-only">Subreddit 2</label>
+            <input type="text" class="form-control" id="sr2" placeholder="Subreddit 2" autocorrect="off" autocapitalize="off">
+          </div>
+          <button type="submit" id="go" class="btn btn-info">Go</button>
+        </form>
+        <div class="message"></div>
+      </div>
+      <div class="progress progress-striped">
+        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <span class="sr-only">0%</span>
+        </div>
+      </div>
+      <div class="titlecontainer"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
