@@ -1,27 +1,7 @@
-/*global titles:true, sr1:true, sr2:true, i:true*/
-function shuffleArray(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-  return array;
-}
-function choiceClick(id) {
-  console.log(id);
-  wrapid = id.replace(/\D/g,'');
-  solution = id.replace(/\d+/g, '');
-  $("#titlewrap" + wrapid).css("background", "#000");
-  if (solution === "left") {
-    solution = "1";
-  } else {
-    solution = "2";
-  }
-  if (solutions[wrapid] === solution) {
-    $("#titlewrap" + wrapid).css("background", "#47a447");
-  } else {
-    $("#titlewrap" + wrapid).css("background", "#d2322d");
+/*global titles:true, sr1:true, sr2:true, i:true, score:true, solutions:true, limit:true, order:true, id:true, row:true, answer:true, answered:true */
+function checkScore() {
+  if (answered === solutions.length) {
+    $("#titlecontainer").append("<div class='titlewrap'><h2>Congratulations!<h2><h3>Score: " + score + "/" + answered + "</h3></div>");
   }
 }
 $(document).ready(function () {
@@ -31,47 +11,50 @@ $(document).ready(function () {
     sr1 = $("#sr1").val();
     sr2 = $("#sr2").val();
     if (sr1 === "" || sr2 === "") {
-      $(".message").html("You do realise you have to actually type something in, right?");
+      $("#message").html("You do realise you have to actually type something in, right?");
     } else if (sr1 === sr2) {
-      $(".message").html("Stop trying to break me, you can't use the same two subreddits");
+      $("#message").html("Stop trying to break me, you can't use the same two subreddits");
     } else {
-      $(".progress").show();
-      $(".progress-bar").css("width", "0");
-      $(".progress-bar").attr("aria-valuenow", "0");
-      $(".progress-bar>span").html("0%");
-      $(".message").html("");
-      $(".titlecontainer").html("");
+      $("#message").html("");
+      $("#titlecontainer").html("");
+      score = 0;
+      answered = 0;
       titles = [];
       solutions = [];
-      $.getJSON("http://www.reddit.com/r/" + sr1 + ".json?jsonp=?&limit=5", function (sr1) {
-        $.each(sr1.data.children, function (i, sr1data) {
-          titles.push(sr1data.data.title + "1");
+      limit = $("#limit").val();
+      if (parseInt(limit, 10) < 1 || limit === "") {
+        limit = "10";
+      }
+      order = $("#order").val();
+      $.getJSON("http://www.reddit.com/r/" + sr1 + "+" + sr2 + "/" + order + ".json?jsonp=?&limit=" + limit, function (combined) {
+        $.each(combined.data.children, function (i, data) {
+          titles.push(data.data.title);
+          solutions.push(data.data.subreddit);
         });
       }).done(function () {
-        $(".progress-bar").css("width", "100%");
-        $(".progress-bar").attr("aria-valuenow", "100");
-        $(".progress-bar>span").html("100%");
-        $.getJSON("http://www.reddit.com/r/" + sr2 + ".json?jsonp=?&limit=5", function (sr2) {
-          $.each(sr2.data.children, function (i, sr2data) {
-            titles.push(sr2data.data.title + "2");
-          });
-        }).done(function () {
-          $(".progress").hide();
-          titles = shuffleArray(titles);
-          for (i = 0; i < titles.length; i++) {
-            solutions[i] = titles[i].substr(titles[i].length - 1);
-          }
-          for (i = 0; i < titles.length; i++) {
-            titles[i] = titles[i].slice(0, -1);
-          }
-          for (i = 0; i < titles.length; i++) {
-            $(".titlecontainer").append("<div class='titlewrap' id='titlewrap" + i + "'><h3 class='title' id='title" + i + "'>" + titles[i] + "</h3><p><button onclick='choiceClick(\"left" + i + "\")' class='btn btn-success btn-choice' id='buttonleft" + i + "'>" + sr1 + "</button><button onclick='choiceClick(\"right" + i + "\")' class='btn btn-warning btn-choice' id='buttonright" + i + "'>" + sr2 + "</button></p></div>");
-          }
-        });
+        for (i = 0; i < titles.length; i++) {
+          $("#titlecontainer").append("<div class='titlewrap' id='titlewrap" + i + "'><h3 class='title' id='title" + i + "'>" + titles[i] + "</h3><p><button class='btn btn-success btn-choice' id='" + sr1 + i + "'>" + sr1 + "</button><button class='btn btn-warning btn-choice' id='" + sr2 + i + "'>" + sr2 + "</button></p></div>");
+        }
       });
     }
   });
-  $("#about").click(function () {
-    $(".about").slideToggle(600);
+  $("#settings").click(function () {
+    $(".settings").slideToggle(600);
+  });
+  $(document).on("click", ".btn-choice", function () {
+    id = $(this).attr("id");
+    row = id.replace(/\D/g, '');
+    answer = id.replace(/\d+/g, '');
+    $("#" + sr1 + row + ",#" + sr2 + row).attr("disabled", true);
+    if (solutions[row] === answer) {
+      $("#titlewrap" + row).css("background", "#47a447").slideUp(600);
+      answered++;
+      score++;
+      checkScore();
+    } else {
+      $("#titlewrap" + row).css("background", "#d2322d").slideUp(600);
+      answered++;
+      checkScore();
+    }
   });
 });

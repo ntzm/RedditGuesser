@@ -79,19 +79,21 @@ body {
   }
 }
 
-.titlecontainer {
+#titlecontainer {
   text-align: center;
 }
 .btn-choice {
   width: 160px;
   margin: 5px;
 }
-.about {
+.settings {
   display: none;
   background: #eee;
   border: 1px solid #eee;
   border-radius: 6px;
   text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .titlewrap {
   background: #eee;
