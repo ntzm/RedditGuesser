@@ -8,8 +8,8 @@ $(document).ready(function () {
   $(".progress").hide();
   $("form").submit(function (e) {
     e.preventDefault();
-    sr1 = $("#sr1").val();
-    sr2 = $("#sr2").val();
+    sr1 = $("#sr1").val().toLowerCase();
+    sr2 = $("#sr2").val().toLowerCase();
     if (sr1 === "" || sr2 === "") {
       $("#message").html("You do realise you have to actually type something in, right?");
     } else if (sr1 === sr2) {
@@ -29,7 +29,8 @@ $(document).ready(function () {
       $.getJSON("http://www.reddit.com/r/" + sr1 + "+" + sr2 + "/" + order + ".json?jsonp=?&limit=" + limit, function (combined) {
         $.each(combined.data.children, function (i, data) {
           titles.push(data.data.title);
-          solutions.push(data.data.subreddit);
+          lastsolution = data.data.subreddit;
+          solutions.push(lastsolution.toLowerCase());
         });
       }).done(function () {
         for (i = 0; i < titles.length; i++) {
