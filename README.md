@@ -1,4 +1,4 @@
-# Reddit Guesser v0.1.1
+# Reddit Guesser v0.2
 
 Type in two subreddits, and decide which title belongs to which subreddit!
 
@@ -8,19 +8,30 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 
 ### In the near future:
 
-- Have an equal number of results per subreddit (will take longer, so will introduce a loading bar of some description)
 - Make a branch which uses PHP to call the reddit API, so people at work or school where reddit is blocked can still use it
-- Improve error reporting
-- Add more options
-- Make it harder to cheat
 - Have the option to add more subreddits for an extra challenge
 - Clean up bootstrap CSS that I stole (make sure to check responsiveness)
+- Add loading thing
+- Add some kind of cool logo thing
 
 ### In the distant future:
 
 - Have an option rate your subreddit combination and submit it to an online database, where people can upvote their favourite combinations
 
 ## Changelog
+
+### v0.2
+
+- Changed info icon to info icon with circle
+- Changed icon hover cursor to default
+- Changed title and solution storage solution to a 2D array to allow for expandability
+- Split the JSON calls into two, making it slower but allowing both subreddits to have equal amounts of results
+- Rearranged the script file into a more logical order
+- Removed comments - ain't nobody got time for that
+- Added JSHint crap
+- Added warning if the user has javascript disabled or an outdated browser
+- Added some witty banter to the console for cheaters
+- Updated buttons to improve cross-browser stuff
 
 ### v0.1.2
 
@@ -32,6 +43,7 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 - Added javascript annotation
 - Added basic error reporting
 - Removed button colouring to allow for eventual expandability
+- Removed that damned JSHint code
 
 ### v0.1.1
 
