@@ -1,4 +1,4 @@
-/*global j:true, temp:true, answered:true, score:true, answered:true, subs:true, limit:true, intlimit:true, tisol:true, i:true, order:true, id:true, row:true, answer:true */
+/*global j:true, temp:true, answered:true, score:true, answered:true, subs:true, limit:true, intlimit:true, tisol:true, i:true, order:true, id:true, row:true, answer:true, usephp:true */
 function checkScore() {
   if (answered === tisol.length) {
     $("#titlecontainer").append("<div class='titlewrap'><h2>Congratulations!<h2><h3>Score: " + score + "/" + answered + "</h3></div>");
@@ -39,34 +39,69 @@ $(document).ready(function () {
       for (i = 0; i < intlimit * subs.length; i++) {
         tisol[i] = [];
       }
+      if ($("#usephp").is(":checked")) {
+        usephp = 1;
+      } else {
+        usephp = 0;
+      }
       order = $("#order").val();
-      $.getJSON("http://www.reddit.com/r/" + subs[0] + "/" + order + ".json?jsonp=?&limit=" + limit, function (result0) {
-        $.each(result0.data.children, function (i, data) {
-          tisol[i][0] = (data.data.title);
-          tisol[i][1] = (data.data.subreddit).toLowerCase();
-        });
-      })
-        .done(function () {
-          $.getJSON("http://www.reddit.com/r/" + subs[1] + "/" + order + ".json?jsonp=?&limit=" + limit, function (result1) {
-            $.each(result1.data.children, function (i, data) {
-              i = i + intlimit;
-              tisol[i][0] = (data.data.title);
-              tisol[i][1] = (data.data.subreddit).toLowerCase();
-            });
+      if (usephp === 1) {
+        $.post("call.php", {limit: limit, order: order, sr: subs[0]}, function (result) {
+          $.each(result.data.children, function (i, data) {
+            tisol[i][0] = (data.data.title);
+            tisol[i][1] = (data.data.subreddit).toLowerCase();
+          });
+        }, "json")
+          .done(function () {
+            $.post("call.php", {limit: limit, order: order, sr: subs[1]}, function (result) {
+              $.each(result.data.children, function (i, data) {
+                i = i + intlimit;
+                tisol[i][0] = (data.data.title);
+                tisol[i][1] = (data.data.subreddit).toLowerCase();
+              });
+            }, "json")
+              .done(function () {
+                tisol = shuffleArray(tisol);
+                for (i = 0; i < tisol.length; i++) {
+                  $("#titlecontainer").append("<div class='titlewrap' id='titlewrap" + i + "'><h3 class='title' id='title" + i + "'>" + tisol[i][0] + "</h3><p><button class='btn btn-default btn-choice' id='" + subs[0] + i + "'>" + subs[0] + "</button><button class='btn btn-default btn-choice' id='" + subs[1] + i + "'>" + subs[1] + "</button></p></div>");
+                }
+              })
+              .fail(function () {
+                $("#message").html("Subreddit does not exist or access to reddit is denied");
+              });
           })
-            .done(function () {
-              tisol = shuffleArray(tisol);
-              for (i = 0; i < tisol.length; i++) {
-                $("#titlecontainer").append("<div class='titlewrap' id='titlewrap" + i + "'><h3 class='title' id='title" + i + "'>" + tisol[i][0] + "</h3><p><button class='btn btn-default btn-choice' id='" + subs[0] + i + "'>" + subs[0] + "</button><button class='btn btn-default btn-choice' id='" + subs[1] + i + "'>" + subs[1] + "</button></p></div>");
-              }
-            })
-            .fail(function () {
-              $("#message").html("Subreddit does not exist or access to reddit is denied");
-            });
+          .fail(function () {
+            $("#message").html("Subreddit does not exist or access to reddit is denied");
+          });
+      } else {
+        $.getJSON("http://www.reddit.com/r/" + subs[0] + "/" + order + ".json?jsonp=?&limit=" + limit, function (result0) {
+          $.each(result0.data.children, function (i, data) {
+            tisol[i][0] = (data.data.title);
+            tisol[i][1] = (data.data.subreddit).toLowerCase();
+          });
         })
-        .fail(function () {
-          $("#message").html("Subreddit does not exist or access to reddit is denied");
-        });
+          .done(function () {
+            $.getJSON("http://www.reddit.com/r/" + subs[1] + "/" + order + ".json?jsonp=?&limit=" + limit, function (result1) {
+              $.each(result1.data.children, function (i, data) {
+                i = i + intlimit;
+                tisol[i][0] = (data.data.title);
+                tisol[i][1] = (data.data.subreddit).toLowerCase();
+              });
+            })
+              .done(function () {
+                tisol = shuffleArray(tisol);
+                for (i = 0; i < tisol.length; i++) {
+                  $("#titlecontainer").append("<div class='titlewrap' id='titlewrap" + i + "'><h3 class='title' id='title" + i + "'>" + tisol[i][0] + "</h3><p><button class='btn btn-default btn-choice' id='" + subs[0] + i + "'>" + subs[0] + "</button><button class='btn btn-default btn-choice' id='" + subs[1] + i + "'>" + subs[1] + "</button></p></div>");
+                }
+              })
+              .fail(function () {
+                $("#message").html("Subreddit does not exist or access to reddit is denied");
+              });
+          })
+          .fail(function () {
+            $("#message").html("Subreddit does not exist or access to reddit is denied");
+          });
+      }
     }
   });
   $(document).on("click", ".btn-choice", function () {

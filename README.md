@@ -1,4 +1,4 @@
-# Reddit Guesser v0.2
+# Reddit Guesser v0.2.1
 
 Type in two subreddits, and decide which title belongs to which subreddit!
 
@@ -8,7 +8,6 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 
 ### In the near future:
 
-- Make a branch which uses PHP to call the reddit API, so people at work or school where reddit is blocked can still use it
 - Have the option to add more subreddits for an extra challenge
 - Clean up bootstrap CSS that I stole (make sure to check responsiveness)
 - Add loading thing
@@ -19,6 +18,10 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 - Have an option rate your subreddit combination and submit it to an online database, where people can upvote their favourite combinations
 
 ## Changelog
+
+### v0.2.1
+
+- Added "Use PHP?" option for people who cannot access reddit
 
 ### v0.2
 
