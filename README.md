@@ -2,14 +2,13 @@
 
 Type in two subreddits, and decide which title belongs to which subreddit!
 
-[Live example](http://www.natzim.com/redditguesser/)
+[Live example](http://www.natzim.me/reddit-guesser/)
 
 ## Todo:
 
 ### In the near future:
 
 - Have the option to add more subreddits for an extra challenge
-- Clean up bootstrap CSS that I stole (make sure to check responsiveness)
 - Add loading thing
 - Add some kind of cool logo thing
 
@@ -18,6 +17,11 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 - Have an option rate your subreddit combination and submit it to an online database, where people can upvote their favourite combinations
 
 ## Changelog
+
+### v1.0.0
+
+- Cleaned up literally everything
+- Removed PHP option
 
 ### v0.2.1
 

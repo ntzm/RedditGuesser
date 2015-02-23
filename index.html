@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reddit Guesser</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <p class="text-muted">Created by <a href="https://twitter.com/natzim_">Nat Zimmermann</a>. View the source on <a href="https://github.com/natzim/RedditGuesser">GitHub</a>.</p>
+        <h1>Reddit Guesser <small>v1.0.0</small></h1>
+        <form id="form-main" role="form">
+          <div class="form-group">
+            <input type="text" class="form-control" name="subs[]" placeholder="Subreddit 1" autocorrect="off" autocapitalize="off" maxlength="20" autofocus>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="subs[]" placeholder="Subreddit 2" autocorrect="off" autocapitalize="off" maxlength="20-">
+          </div>
+          <div class="settings well">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="order" class="control-label">Order by</label>
+                  <select id="order" class="form-control">
+                    <option value="hot">Hot</option>
+                    <option value="new">New</option>
+                    <option value="rising">Rising</option>
+                    <option value="controversial">Controversial</option>
+                    <option value="top">Top</option>
+                  </select>
+                </div>
+              </div><!-- /.col-md-6 -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="limit" class="control-label">Number of posts</label>
+                  <input id="limit" type="number" class="form-control" value="10">
+                </div>
+              </div><!-- /.col-md-6 -->
+            </div><!-- /.row -->
+          </div><!-- /.settings -->
+          <button type="submit" class="btn btn-primary btn-lg">Go</button>
+        </form>
+        <p class="text-danger lead" id="message"></p>
+      </div><!-- /.jumbotron -->
+      <div id="title-container"></div>
+    </div><!-- /.container -->
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

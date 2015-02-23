@@ -1,11 +1,200 @@
-/*global j:true, temp:true, answered:true, score:true, answered:true, subs:true, limit:true, intlimit:true, tisol:true, i:true, order:true, id:true, row:true, answer:true, usephp:true */
-function checkScore() {
-  if (answered === tisol.length) {
-    $("#titlecontainer").append("<div class='titlewrap'><h2>Congratulations!<h2><h3>Score: " + score + "/" + answered + "</h3></div>");
+/**
+ * Reddit Guesser
+ *
+ * @author Nat Zimmermann <nat@natzim.me>
+ * @version 1.0.0
+ */
+
+var app = {
+  /**
+   * Sets the message
+   * @param {string} text
+   */
+  setMessage: function (text) {
+    $('#message').html(text);
+  },
+
+  /**
+   * Processes response from reddit API
+   *
+   * @param  {array} data Array of objects returned by reddit API
+   */
+  processResponse: function (data) {
+    var posts = shuffleArray(data.data.children);
+    this.posts = posts;
+
+    var subButtons = '';
+
+    for (var i = 0; i < this.subs.length; i++) {
+      var sub = this.subs[i];
+
+      subButtons += '<button class="btn btn-default btn-choice">' + sub + '</button>';
+    }
+
+    for (var i = 0; i < posts.length; i++) {
+      var post = posts[i].data;
+
+      $('#title-container').append(
+        '<div class="titlewrap panel panel-default" data-index="' + i + '">' +
+          '<div class="panel-heading">' +
+            '<h3 class="title">' + post.title + '</h3>' +
+          '</div>' +
+          '<div class="panel-body">' +
+            '<div class="btn-group btn-group-lg">' +
+              subButtons +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+  },
+
+  /**
+   * Tests if answer is correct
+   *
+   * @param  {Object} $titleContainer jQuery Object of the title container
+   * @param  {string} answer          Subreddit name
+   */
+  processAnswer: function ($titleContainer, answer) {
+    var index = $titleContainer.data('index');
+
+    if (this.posts[index].data.subreddit === answer) {
+
+      // Correct
+      this.score++;
+      $titleContainer.addClass('panel-success');
+    } else {
+
+      // Incorrect
+      $titleContainer.addClass('panel-danger');
+    }
+
+    this.answered++;
+    $titleContainer.find('.btn-choice').prop('disabled', 'disabled');
+
+    if (this.answered >= this.posts.length) {
+
+      // Complete
+      $('#title-container').append(
+        '<div class="panel panel-success">' +
+          '<div class="panel-body">' +
+            '<p class="lead">Congratulations! You got ' + this.score + '/' + this.answered + '!</p>' +
+            '<a class="btn btn-success scroll-top">Try again</a>' +
+          '</div>' +
+        '</div>'
+      );
+
+      // Scroll to bottom of page
+      $('body').animate({
+        scrollTop: $('body').height()
+      }, 1000);
+    }
+  },
+
+  /**
+   * Attempts to submit the form
+   *
+   * @param  {array}  subs   Array of subreddit names
+   * @param  {int}    limit  Maximum number of results to retrieve
+   * @param  {string} order  Order of results
+   */
+  submitForm: function (subs, limit, order) {
+    // Set variables
+    this.score    = 0;
+    this.answered = 0;
+
+    this.subs = subs;
+
+    // Clear HTML containers
+    this.setMessage('');
+    $('#title-container').html('');
+
+    var request = $.ajax({
+      url: 'http://www.reddit.com/r/' + subs.join('+') + '/' + order + '.json?jsonp=app.processResponse&limit=' + limit,
+      type: 'get'
+    });
+
+    request.fail(function(jqXHR) {
+
+      // TODO: Add more status cases
+      switch (jqXHR.status) {
+        case 404: // Not found
+          app.setMessage('These subreddits do not exist.');
+          break;
+        default:
+          app.setMessage('Something went wrong and we\'re not quite sure what. Error: ' + jqXHR.status + ' ' + jqXHR.statusText);
+      }
+    });
   }
-}
-function shuffleArray(array) {
-  for (i = array.length - 1; i > 0; i--) {
+};
+
+/**
+ * Events
+ */
+
+// When the main form is submitted
+$("#form-main").submit(function (e) {
+  var validated = true;
+
+  var subs = $(this).serializeArray().map(function (object) {
+    return object.value;
+  });
+
+  for (var i = 0; i < subs.length; i++) {
+    var sub = subs[i];
+
+    if (sub === "") {
+      validated = false;
+    }
+  }
+
+  if (validated) {
+    app.submitForm(
+      subs,
+      $('#limit').val(),
+      $('#order').val()
+    );
+  } else {
+    app.setMessage('Please fill in all of the inputs!');
+    return false;
+  }
+});
+
+// When a button choice is clicked
+$(document).on('click', '.btn-choice', function () {
+  var $element        = $(this),
+      $titleContainer = $element.closest('.titlewrap');
+
+  app.processAnswer(
+    $titleContainer,
+    $element.html()
+  );
+});
+
+// Scroll to the top of the page
+$(document).on('click', '.scroll-top', function () {
+  $('body').animate({
+    scrollTop: 0
+  }, 1000);
+});
+
+// Prevent any form from reloading the page
+$('form').submit(function (e) {
+  e.preventDefault();
+});
+
+/**
+ * Helper functions
+ */
+
+/**
+ * Randomly shuffles an array
+ *
+ * @param  {array} array Un-shuffled array
+ * @return {array}       Shuffled array
+ */
+function shuffleArray (array) {
+  for (var i = array.length - 1; i > 0; i--) {
     j = Math.floor(Math.random() * (i + 1));
     temp = array[i];
     array[i] = array[j];
@@ -13,117 +202,3 @@ function shuffleArray(array) {
   }
   return array;
 }
-$(document).ready(function () {
-  console.log('“I would prefer even to fail with honor than to win by cheating” - Spohocles');
-  $("#message").html("");
-  $("#form-main").submit(function (e) {
-    e.preventDefault();
-    subs = [];
-    subs.push($("#sr1").val().toLowerCase());
-    subs.push($("#sr2").val().toLowerCase());
-    if (subs[0] === "" || subs[1] === "") {
-      $("#message").html("You do realise you have to actually type something in, right?");
-    } else if (subs[0] === subs[1]) {
-      $("#message").html("Stop trying to break me, you can't use the same two subreddits");
-    } else {
-      $("#message").html("");
-      $("#titlecontainer").html("");
-      score = 0;
-      answered = 0;
-      limit = $("#limit").val();
-      intlimit = parseInt(limit, 10);
-      if (intlimit < 1 || limit === "" || !/[0-9]/.test(limit)) {
-        limit = "5";
-      }
-      tisol = [];
-      for (i = 0; i < intlimit * subs.length; i++) {
-        tisol[i] = [];
-      }
-      if ($("#usephp").is(":checked")) {
-        usephp = 1;
-      } else {
-        usephp = 0;
-      }
-      order = $("#order").val();
-      if (usephp === 1) {
-        $.post("call.php", {limit: limit, order: order, sr: subs[0]}, function (result) {
-          $.each(result.data.children, function (i, data) {
-            tisol[i][0] = (data.data.title);
-            tisol[i][1] = (data.data.subreddit).toLowerCase();
-          });
-        }, "json")
-          .done(function () {
-            $.post("call.php", {limit: limit, order: order, sr: subs[1]}, function (result) {
-              $.each(result.data.children, function (i, data) {
-                i = i + intlimit;
-                tisol[i][0] = (data.data.title);
-                tisol[i][1] = (data.data.subreddit).toLowerCase();
-              });
-            }, "json")
-              .done(function () {
-                tisol = shuffleArray(tisol);
-                for (i = 0; i < tisol.length; i++) {
-                  $("#titlecontainer").append("<div class='titlewrap' id='titlewrap" + i + "'><h3 class='title' id='title" + i + "'>" + tisol[i][0] + "</h3><p><button class='btn btn-default btn-choice' id='" + subs[0] + i + "'>" + subs[0] + "</button><button class='btn btn-default btn-choice' id='" + subs[1] + i + "'>" + subs[1] + "</button></p></div>");
-                }
-              })
-              .fail(function () {
-                $("#message").html("Subreddit does not exist or access to reddit is denied");
-              });
-          })
-          .fail(function () {
-            $("#message").html("Subreddit does not exist or access to reddit is denied");
-          });
-      } else {
-        $.getJSON("http://www.reddit.com/r/" + subs[0] + "/" + order + ".json?jsonp=?&limit=" + limit, function (result0) {
-          $.each(result0.data.children, function (i, data) {
-            tisol[i][0] = (data.data.title);
-            tisol[i][1] = (data.data.subreddit).toLowerCase();
-          });
-        })
-          .done(function () {
-            $.getJSON("http://www.reddit.com/r/" + subs[1] + "/" + order + ".json?jsonp=?&limit=" + limit, function (result1) {
-              $.each(result1.data.children, function (i, data) {
-                i = i + intlimit;
-                tisol[i][0] = (data.data.title);
-                tisol[i][1] = (data.data.subreddit).toLowerCase();
-              });
-            })
-              .done(function () {
-                tisol = shuffleArray(tisol);
-                for (i = 0; i < tisol.length; i++) {
-                  $("#titlecontainer").append("<div class='titlewrap' id='titlewrap" + i + "'><h3 class='title' id='title" + i + "'>" + tisol[i][0] + "</h3><p><button class='btn btn-default btn-choice' id='" + subs[0] + i + "'>" + subs[0] + "</button><button class='btn btn-default btn-choice' id='" + subs[1] + i + "'>" + subs[1] + "</button></p></div>");
-                }
-              })
-              .fail(function () {
-                $("#message").html("Subreddit does not exist or access to reddit is denied");
-              });
-          })
-          .fail(function () {
-            $("#message").html("Subreddit does not exist or access to reddit is denied");
-          });
-      }
-    }
-  });
-  $(document).on("click", ".btn-choice", function () {
-    id = $(this).attr("id");
-    row = id.replace(/\D/g, '');
-    answer = id.replace(/\d+/g, '');
-    $("#" + subs[0] + row + ",#" + subs[1] + row).attr("disabled", true);
-    if (tisol[row][1] === answer) {
-      $("#titlewrap" + row).css("background", "#47a447").slideUp(600);
-      answered++;
-      score++;
-      checkScore();
-    } else {
-      $("#titlewrap" + row).css("background", "#d2322d").slideUp(600);
-      answered++;
-      checkScore();
-    }
-  });
-  $("#settings").click(function () {
-    $(".settings").slideToggle(600);
-  });
-  $("#settingsform").submit(function (e) {
-    e.preventDefault();
-  });
-});
