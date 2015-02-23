@@ -1,4 +1,4 @@
-# Reddit Guesser v0.2.1
+# Reddit Guesser v1.0.0
 
 Type in two subreddits, and decide which title belongs to which subreddit!
 
