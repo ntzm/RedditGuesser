@@ -18,6 +18,10 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 
 ## Changelog
 
+### v1.1.0
+
+- Added 'from' filter
+
 ### v1.0.1
 
 - Fixed bug that made the user guess the wrong subreddits because of incorrectly-cased subreddits

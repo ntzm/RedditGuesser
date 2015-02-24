@@ -2,10 +2,12 @@
  * Reddit Guesser
  *
  * @author  Nat Zimmermann <nat@natzim.me>
- * @version 1.0.1
+ * @version 1.1.0
  */
 
 var app = {
+  from: false,
+
   /**
    * Set the message
    *
@@ -75,7 +77,7 @@ var app = {
     }
 
     this.answered++;
-    $titleContainer.find('.btn-choice').prop('disabled', 'disabled');
+    $titleContainer.find('.btn-choice').prop('disabled', true);
 
     if (this.answered >= this.posts.length) {
 
@@ -99,8 +101,9 @@ var app = {
    * @param {array}  subs  - Array of subreddit names
    * @param {number} limit - Maximum number of results to retrieve
    * @param {string} order - Order of results
+   * @param {string} from  - When the results should be from
    */
-  submitForm: function (subs, limit, order) {
+  submitForm: function (subs, limit, order, from) {
     // Set variables
     this.score    = 0;
     this.answered = 0;
@@ -112,7 +115,7 @@ var app = {
     $('#title-container').html('');
 
     var request = $.ajax({
-      url: 'http://www.reddit.com/r/' + subs.join('+') + '/' + order + '.json?jsonp=app.processResponse&limit=' + limit,
+      url: 'http://www.reddit.com/r/' + subs.join('+') + '/' + order + '.json?jsonp=app.processResponse' + (this.from ? '&t=' + from : '') + '&limit=' + limit,
       type: 'get'
     });
 
@@ -158,7 +161,8 @@ $("#form-main").submit(function (e) {
     app.submitForm(
       subs,
       $('#limit').val(),
-      $('#order').val()
+      $('#order').val(),
+      $('#from').val()
     );
   } else {
     app.setMessage('Please fill in all of the inputs!');
@@ -185,6 +189,17 @@ $(document).on('click', '.scroll-top', function () {
 // Prevent any form from reloading the page
 $('form').submit(function (e) {
   e.preventDefault();
+});
+
+// Only enable 'from' dropdown on appropriate orders
+$('#order').change(function () {
+  if ($(this).val() === 'top' || $(this).val() === 'controversial') {
+    $('#from').prop('disabled', false);
+    app.from = true;
+  } else {
+    $('#from').prop('disabled', true);
+    app.from = false;
+  }
 });
 
 /**
