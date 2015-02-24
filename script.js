@@ -58,7 +58,7 @@ var app = {
   processAnswer: function ($titleContainer, answer) {
     var index = $titleContainer.data('index');
 
-    if (this.posts[index].data.subreddit === answer) {
+    if (this.posts[index].data.subreddit.toLowerCase() === answer.toLowerCase()) {
 
       // Correct
       this.score++;
