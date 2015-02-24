@@ -1,23 +1,24 @@
 /**
  * Reddit Guesser
  *
- * @author Nat Zimmermann <nat@natzim.me>
+ * @author  Nat Zimmermann <nat@natzim.me>
  * @version 1.0.1
  */
 
 var app = {
   /**
-   * Sets the message
-   * @param {string} text
+   * Set the message
+   *
+   * @param {string} text - Message to show
    */
   setMessage: function (text) {
     $('#message').html(text);
   },
 
   /**
-   * Processes response from reddit API
+   * Process response from reddit API
    *
-   * @param  {array} data Array of objects returned by reddit API
+   * @param {array} data - Array of objects returned by reddit API
    */
   processResponse: function (data) {
     var posts = shuffleArray(data.data.children);
@@ -54,10 +55,10 @@ var app = {
   },
 
   /**
-   * Tests if answer is correct
+   * Test if answer is correct
    *
-   * @param  {Object} $titleContainer jQuery Object of the title container
-   * @param  {string} answer          Subreddit name
+   * @param {Object} $titleContainer - jQuery Object of the title container
+   * @param {string} answer          - Subreddit name
    */
   processAnswer: function ($titleContainer, answer) {
     var index = $titleContainer.data('index');
@@ -95,9 +96,9 @@ var app = {
   /**
    * Attempts to submit the form
    *
-   * @param  {array}  subs   Array of subreddit names
-   * @param  {int}    limit  Maximum number of results to retrieve
-   * @param  {string} order  Order of results
+   * @param {array}  subs  - Array of subreddit names
+   * @param {number} limit - Maximum number of results to retrieve
+   * @param {string} order - Order of results
    */
   submitForm: function (subs, limit, order) {
     // Set variables
@@ -191,10 +192,10 @@ $('form').submit(function (e) {
  */
 
 /**
- * Randomly shuffles an array
+ * Randomly shuffle an array
  *
- * @param  {array} array Un-shuffled array
- * @return {array}       Shuffled array
+ * @param  {array} array - Un-shuffled array
+ * @return {array}       - Shuffled array
  */
 function shuffleArray (array) {
   for (var i = array.length - 1; i > 0; i--) {
@@ -209,8 +210,8 @@ function shuffleArray (array) {
 /**
  * Scrolls the page to a given element
  *
- * @param  {string|Object} target       jQuery object or 'top' or 'bottom'
- * @param  {int}           [speed=1000] Time in milliseconds for the scroll to take
+ * @param {string|Object} target       - jQuery object or 'top' or 'bottom'
+ * @param {int}           [speed=1000] - Time in milliseconds for the scroll to take
  */
 function scrollTo (target, speed) {
   speed = speed || 1000;
@@ -232,4 +233,3 @@ function scrollTo (target, speed) {
     scrollTop: target
   }, speed);
 }
-
