@@ -23,6 +23,7 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 - Fixed bug that made the user guess the wrong subreddits because of incorrectly-cased subreddits
 - Implemented scrollTo function for easier scrolling
 - Made the browser scroll to titles after adding the titles
+- Added loading state to button
 
 ### v1.0.0
 

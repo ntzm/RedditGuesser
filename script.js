@@ -49,6 +49,8 @@ var app = {
     }
 
     scrollTo($('#title-container'));
+
+    $('#btn-submit').button('reset');
   },
 
   /**
@@ -115,6 +117,8 @@ var app = {
 
     request.fail(function(jqXHR) {
 
+      $('#btn-submit').button('reset');
+
       // TODO: Add more status cases
       switch (jqXHR.status) {
         case 404: // Not found
@@ -148,6 +152,8 @@ $("#form-main").submit(function (e) {
   }
 
   if (validated) {
+    $('#btn-submit').button('loading');
+
     app.submitForm(
       subs,
       $('#limit').val(),
