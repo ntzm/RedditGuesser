@@ -47,6 +47,8 @@ var app = {
         '</div>'
       );
     }
+
+    scrollTo($('#title-container'));
   },
 
   /**
@@ -84,10 +86,7 @@ var app = {
         '</div>'
       );
 
-      // Scroll to bottom of page
-      $('body').animate({
-        scrollTop: $('body').height()
-      }, 1000);
+      scrollTo('bottom');
     }
   },
 
@@ -173,9 +172,7 @@ $(document).on('click', '.btn-choice', function () {
 
 // Scroll to the top of the page
 $(document).on('click', '.scroll-top', function () {
-  $('body').animate({
-    scrollTop: 0
-  }, 1000);
+  scrollTo('top');
 });
 
 // Prevent any form from reloading the page
@@ -202,3 +199,31 @@ function shuffleArray (array) {
   }
   return array;
 }
+
+/**
+ * Scrolls the page to a given element
+ *
+ * @param  {string|Object} target       jQuery object or 'top' or 'bottom'
+ * @param  {int}           [speed=1000] Time in milliseconds for the scroll to take
+ */
+function scrollTo (target, speed) {
+  speed = speed || 1000;
+
+  switch (target) {
+    case 'top':
+      target = 0;
+      break;
+
+    case 'bottom':
+      target = $('body').height();
+      break;
+
+    default:
+      target = target.offset().top
+  }
+
+  $('body').animate({
+    scrollTop: target
+  }, speed);
+}
+

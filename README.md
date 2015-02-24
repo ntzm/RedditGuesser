@@ -1,4 +1,4 @@
-# Reddit Guesser v1.0.1
+# Reddit Guesser
 
 Type in two subreddits, and decide which title belongs to which subreddit!
 
@@ -21,6 +21,8 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 ### v1.0.1
 
 - Fixed bug that made the user guess the wrong subreddits because of incorrectly-cased subreddits
+- Implemented scrollTo function for easier scrolling
+- Made the browser scroll to titles after adding the titles
 
 ### v1.0.0
 
