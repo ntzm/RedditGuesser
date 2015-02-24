@@ -1,4 +1,4 @@
-# Reddit Guesser v1.0.0
+# Reddit Guesser v1.0.1
 
 Type in two subreddits, and decide which title belongs to which subreddit!
 
@@ -17,6 +17,10 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 - Have an option rate your subreddit combination and submit it to an online database, where people can upvote their favourite combinations
 
 ## Changelog
+
+### v1.0.1
+
+- Fixed bug that made the user guess the wrong subreddits because of incorrectly-cased subreddits
 
 ### v1.0.0
 
