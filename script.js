@@ -2,7 +2,7 @@
  * Reddit Guesser
  *
  * @author  Nat Zimmermann <nat@natzim.me>
- * @version 1.2.0
+ * @version 1.2.1
  */
 
 var app = {
@@ -127,6 +127,7 @@ var app = {
       switch (jqXHR.status) {
         case 404: // Not found
           app.setMessage('These subreddits do not exist.');
+          $('#subreddit-container > .input-group').addClass('has-error');
           break;
         default:
           app.setMessage('Something went wrong and we\'re not quite sure what. Error: ' + jqXHR.status + ' ' + jqXHR.statusText);
@@ -141,6 +142,8 @@ var app = {
 
 // When the main form is submitted
 $("#form-main").submit(function (e) {
+  $('#subreddit-container > .input-group').removeClass('has-error');
+
   var validated = true;
 
   var subs = $(this).serializeArray().map(function (object) {
@@ -165,8 +168,7 @@ $("#form-main").submit(function (e) {
       $('#from').val()
     );
   } else {
-    app.setMessage('Please fill in all of the inputs!');
-    return false;
+    $('#subreddit-container > .input-group').addClass('has-error');
   }
 });
 
@@ -209,7 +211,7 @@ $('#btn-add-subreddit').click(function (e) {
       '<div class="input-group-addon">/r/</div>' +
       '<input type="text" class="form-control" name="subs[]" autocorrect="off" autocapitalize="off" maxlength="20">' +
       '<span class="input-group-btn">' +
-        '<button tabindex="-1" class="btn btn-danger btn-remove-subreddit">&times;</button>' +
+        '<a tabindex="-1" class="btn btn-danger btn-remove-subreddit">&times;</a>' +
       '</span>' +
     '</div>'
   );

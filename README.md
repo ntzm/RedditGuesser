@@ -18,6 +18,11 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 
 ## Changelog
 
+### v1.2.1
+
+- Fixed enter press selecting wrong button
+- Added validation colours to form inputs
+
 ### v1.2.0
 
 - Added support for multiple subreddits
