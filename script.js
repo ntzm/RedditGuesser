@@ -2,7 +2,7 @@
  * Reddit Guesser
  *
  * @author  Nat Zimmermann <nat@natzim.me>
- * @version 1.1.1
+ * @version 1.2.0
  */
 
 var app = {
@@ -200,6 +200,24 @@ $('#order').change(function () {
     $('#from').prop('disabled', true);
     app.from = false;
   }
+});
+
+$('#btn-add-subreddit').click(function (e) {
+  e.preventDefault();
+  $('#subreddit-container').append(
+    '<div class="input-group form-group">' +
+      '<div class="input-group-addon">/r/</div>' +
+      '<input type="text" class="form-control" name="subs[]" autocorrect="off" autocapitalize="off" maxlength="20">' +
+      '<span class="input-group-btn">' +
+        '<button tabindex="-1" class="btn btn-danger btn-remove-subreddit">&times;</button>' +
+      '</span>' +
+    '</div>'
+  );
+});
+
+$(document).on('click', '.btn-remove-subreddit', function (e) {
+  e.preventDefault();
+  $(this).closest('.form-group').remove();
 });
 
 /**

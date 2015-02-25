@@ -18,6 +18,10 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 
 ## Changelog
 
+### v1.2.0
+
+- Added support for multiple subreddits
+
 ### v1.1.1
 
 - Added short description
