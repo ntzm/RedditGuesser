@@ -38,7 +38,7 @@ var app = {
       var post = posts[i].data;
 
       $('#title-container').append(
-        '<div class="titlewrap panel panel-default" data-index="' + i + '">' +
+        '<div class="title-wrap panel panel-default" data-index="' + i + '">' +
           '<div class="panel-heading">' +
             '<h3 class="title">' + post.title + '</h3>' +
           '</div>' +
@@ -173,7 +173,7 @@ $("#form-main").submit(function (e) {
 // When a button choice is clicked
 $(document).on('click', '.btn-choice', function () {
   var $element        = $(this),
-      $titleContainer = $element.closest('.titlewrap');
+      $titleContainer = $element.closest('.title-wrap');
 
   app.processAnswer(
     $titleContainer,
