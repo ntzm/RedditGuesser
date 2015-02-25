@@ -8,9 +8,8 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 
 ### In the near future:
 
-- Have the option to add more subreddits for an extra challenge
-- Add loading thing
 - Add some kind of cool logo thing
+- Add a link to the post after answering
 
 ### In the distant future:
 
