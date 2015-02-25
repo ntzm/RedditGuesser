@@ -18,6 +18,11 @@ Type in two subreddits, and decide which title belongs to which subreddit!
 
 ## Changelog
 
+### v1.1.1
+
+- Added short description
+- Added /r/ to the start of subreddit inputs
+
 ### v1.1.0
 
 - Added 'from' filter

@@ -2,7 +2,7 @@
  * Reddit Guesser
  *
  * @author  Nat Zimmermann <nat@natzim.me>
- * @version 1.1.0
+ * @version 1.1.1
  */
 
 var app = {

@@ -20,14 +20,17 @@
     <div class="container">
       <div class="jumbotron">
         <p class="text-muted">Created by <a href="https://twitter.com/natzim_">Nat Zimmermann</a>. View the source on <a href="https://github.com/natzim/RedditGuesser">GitHub</a>.</p>
-        <h1>Reddit Guesser <small>v1.1.0</small></h1>
+        <h1>Reddit Guesser <small>v1.1.1</small></h1>
         <p class="text-muted">Enter 2 subreddits below and try to guess which titles come from which subreddit</p>
         <form id="form-main" role="form">
-          <div class="form-group">
-            <input type="text" class="form-control" name="subs[]" placeholder="Subreddit 1" autocorrect="off" autocapitalize="off" maxlength="20" autofocus>
+          <h2>Subreddits</h2>
+          <div class="input-group form-group">
+            <div class="input-group-addon">/r/</div>
+            <input type="text" class="form-control" name="subs[]" autocorrect="off" autocapitalize="off" maxlength="20" autofocus>
           </div>
-          <div class="form-group">
-            <input type="text" class="form-control" name="subs[]" placeholder="Subreddit 2" autocorrect="off" autocapitalize="off" maxlength="20">
+          <div class="input-group form-group">
+            <div class="input-group-addon">/r/</div>
+            <input type="text" class="form-control" name="subs[]" autocorrect="off" autocapitalize="off" maxlength="20">
           </div>
           <div class="settings well">
             <div class="row">
