@@ -1,6 +1,6 @@
 # Reddit Guesser
 
-Type in two subreddits, and decide which title belongs to which subreddit!
+Enter some subreddits and try to guess which title belongs to which subreddit!
 
 [Live example](http://www.natzim.me/reddit-guesser/)
 
