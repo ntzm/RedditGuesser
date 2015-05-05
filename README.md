@@ -17,6 +17,12 @@ Enter some subreddits and try to guess which title belongs to which subreddit!
 
 ## Changelog
 
+### v1.2.2
+
+- Updated coding style
+- Improved performance
+- Added message for 503 error
+
 ### v1.2.1
 
 - Fixed enter press selecting wrong button

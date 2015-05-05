@@ -2,7 +2,7 @@
  * Reddit Guesser
  *
  * @author  Nat Zimmermann <nat@natzim.me>
- * @version 1.2.1
+ * @version 1.2.2
  */
 
 var app = {
@@ -11,7 +11,7 @@ var app = {
   /**
    * Set the message
    *
-   * @param {string} text - Message to show
+   * @param {String} text - Message to show
    */
   setMessage: function (text) {
     $('#message').html(text);
@@ -20,21 +20,24 @@ var app = {
   /**
    * Process response from reddit API
    *
-   * @param {array} data - Array of objects returned by reddit API
+   * @param {Array} data - Array of objects returned by reddit API
    */
   processResponse: function (data) {
+    var i;
     var posts = shuffleArray(data.data.children);
     this.posts = posts;
 
     var subButtons = '';
 
-    for (var i = 0; i < this.subs.length; i++) {
+    i = this.subs.length;
+    while (i--) {
       var sub = this.subs[i];
 
       subButtons += '<button class="btn btn-default btn-choice">' + sub + '</button>';
     }
 
-    for (var i = 0; i < posts.length; i++) {
+    i = posts.length;
+    while (i--) {
       var post = posts[i].data;
 
       $('#title-container').append(
@@ -60,7 +63,7 @@ var app = {
    * Test if answer is correct
    *
    * @param {Object} $titleContainer - jQuery Object of the title container
-   * @param {string} answer          - Subreddit name
+   * @param {String} answer          - Subreddit name
    */
   processAnswer: function ($titleContainer, answer) {
     var index = $titleContainer.data('index');
@@ -96,14 +99,14 @@ var app = {
   },
 
   /**
-   * Attempts to submit the form
+   * Attempt to submit the form
    *
-   * @param {array}  subs  - Array of subreddit names
-   * @param {number} limit - Maximum number of results to retrieve
-   * @param {string} order - Order of results
-   * @param {string} from  - When the results should be from
+   * @param {Array}  subs  - Array of subreddit names
+   * @param {Number} limit - Maximum number of results to retrieve
+   * @param {String} order - Order of results
+   * @param {String} from  - When the results should be from
    */
-  submitForm: function (subs, limit, order, from) {
+  submitForm: function(subs, limit, order, from) {
     // Set variables
     this.score    = 0;
     this.answered = 0;
@@ -129,6 +132,9 @@ var app = {
           app.setMessage('These subreddits do not exist.');
           $('#subreddit-container > .input-group').addClass('has-error');
           break;
+        case 503: // Service unavailable
+          app.setMessage('Reddit is down. Please try again later.');
+          break;
         default:
           app.setMessage('Something went wrong and we\'re not quite sure what. Error: ' + jqXHR.status + ' ' + jqXHR.statusText);
       }
@@ -136,24 +142,24 @@ var app = {
   }
 };
 
-/**
+/*
  * Events
  */
 
 // When the main form is submitted
-$("#form-main").submit(function (e) {
+$("#form-main").submit(function(e) {
   $('#subreddit-container > .input-group').removeClass('has-error');
 
   var validated = true;
 
-  var subs = $(this).serializeArray().map(function (object) {
+  var subs = $(this).serializeArray().map(function(object) {
     return object.value;
   });
 
   for (var i = 0; i < subs.length; i++) {
     var sub = subs[i];
 
-    if (sub === "") {
+    if (sub.trim() === "") {
       validated = false;
     }
   }
@@ -173,7 +179,7 @@ $("#form-main").submit(function (e) {
 });
 
 // When a button choice is clicked
-$(document).on('click', '.btn-choice', function () {
+$(document).on('click', '.btn-choice', function() {
   var $element        = $(this),
       $titleContainer = $element.closest('.title-wrap');
 
@@ -184,18 +190,20 @@ $(document).on('click', '.btn-choice', function () {
 });
 
 // Scroll to the top of the page
-$(document).on('click', '.scroll-top', function () {
+$(document).on('click', '.scroll-top', function() {
   scrollTo('top');
 });
 
 // Prevent any form from reloading the page
-$('form').submit(function (e) {
+$('form').submit(function(e) {
   e.preventDefault();
 });
 
 // Only enable 'from' dropdown on appropriate orders
-$('#order').change(function () {
-  if ($(this).val() === 'top' || $(this).val() === 'controversial') {
+$('#order').change(function() {
+  var order = $(this).val();
+
+  if (order === 'top' || order === 'controversial') {
     $('#from').prop('disabled', false);
     app.from = true;
   } else {
@@ -204,7 +212,7 @@ $('#order').change(function () {
   }
 });
 
-$('#btn-add-subreddit').click(function (e) {
+$('#btn-add-subreddit').click(function(e) {
   e.preventDefault();
   $('#subreddit-container').append(
     '<div class="input-group form-group">' +
@@ -217,22 +225,22 @@ $('#btn-add-subreddit').click(function (e) {
   );
 });
 
-$(document).on('click', '.btn-remove-subreddit', function (e) {
+$(document).on('click', '.btn-remove-subreddit', function(e) {
   e.preventDefault();
   $(this).closest('.form-group').remove();
 });
 
-/**
+/*
  * Helper functions
  */
 
 /**
  * Randomly shuffle an array
  *
- * @param  {array} array - Un-shuffled array
- * @return {array}       - Shuffled array
+ * @param  {Array} array - Un-shuffled array
+ * @return {Array}       - Shuffled array
  */
-function shuffleArray (array) {
+function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
     j = Math.floor(Math.random() * (i + 1));
     temp = array[i];
@@ -245,10 +253,10 @@ function shuffleArray (array) {
 /**
  * Scrolls the page to a given element
  *
- * @param {string|Object} target       - jQuery object or 'top' or 'bottom'
- * @param {int}           [speed=1000] - Time in milliseconds for the scroll to take
+ * @param {String|Object} target       - jQuery object or 'top' or 'bottom'
+ * @param {Number}        [speed=1000] - Time in milliseconds for the scroll to take
  */
-function scrollTo (target, speed) {
+function scrollTo(target, speed) {
   speed = speed || 1000;
 
   switch (target) {
@@ -261,7 +269,7 @@ function scrollTo (target, speed) {
       break;
 
     default:
-      target = target.offset().top
+      target = target.offset().top;
   }
 
   $('body').animate({
